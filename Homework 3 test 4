@@ -1,5 +1,7 @@
 // Author @patriciogv ( patriciogonzalezvivo.com ) - 2015
 //edit Doris gao
+//Homework 3 test 4
+
 
 #ifdef GL_ES
 precision mediump float;
