@@ -1,5 +1,6 @@
 // Author @patriciogv - 2015
 // http://patriciogonzalezvivo.com/
+//edit:doris gao
 
 #ifdef GL_ES
 precision mediump float;
@@ -36,7 +37,7 @@ void main(){
 
 
 /*
-Original code form author
+//Original code form author
 // Author @patriciogv - 2015
 // http://patriciogonzalezvivo.com
 
