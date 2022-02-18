@@ -1,0 +1,72 @@
+// Author @patriciogv - 2015
+// http://patriciogonzalezvivo.com/
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform float u_time;
+
+void main(){
+    vec2 st = gl_FragCoord.xy/u_resolution;
+    float pct = 0.0;
+    vec3 colorA = vec3(u_mouse.x * 0.001,u_mouse.y * 0.001,0.574); // determined another colors
+    vec3 colorB = vec3(0.833,0.623,0.218); //determined blue color
+
+    // a. The DISTANCE from the pixel to the center
+    pct = distance(st,step(vec2(0.5),st));
+
+    // b. The LENGTH of the vector
+    //    from the pixel to the center
+    // vec2 toCenter = vec2(0.5)-st;
+    // pct = length(toCenter);
+
+    // c. The SQUARE ROOT of the vector
+    //    from the pixel to the center
+    // vec2 tC = vec2(0.5)-st;
+    // pct = sqrt(tC.xtC.x+tC.ytC.y);
+
+    vec3 color = mix(colorA,colorB,vec3(pct));
+
+    gl_FragColor = vec4( color, 1.0 );
+}
+
+
+
+/*
+Original code form author
+// Author @patriciogv - 2015
+// http://patriciogonzalezvivo.com
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform float u_time;
+
+void main(){
+	vec2 st = gl_FragCoord.xy/u_resolution;
+    float pct = 0.0;
+
+    // a. The DISTANCE from the pixel to the center
+    pct = min(distance(st,vec2(0.250,0.430)),distance(st,vec2(0.290,0.390)));
+
+    // b. The LENGTH of the vector
+    //    from the pixel to the center
+    // vec2 toCenter = vec2(0.5)-st;
+    // pct = length(toCenter);
+
+    // c. The SQUARE ROOT of the vector
+    //    from the pixel to the center
+    // vec2 tC = vec2(0.5)-st;
+    // pct = sqrt(tC.x*tC.x+tC.y*tC.y);
+
+    vec3 color = vec3(pct);
+
+	gl_FragColor = vec4( color, 1.0 );
+}
+*/
