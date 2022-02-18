@@ -1,0 +1,106 @@
+// Author: Jeremy Rotsztain
+// Title: Layers II
+// Course: ShaderArt (DIGF-3011, Winter 2022)
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform float u_time;
+
+//  by Iñigo Quiles (IQ)
+//  https://www.shadertoy.com/view/MsS3Wc
+
+vec3 hsb2rgb( in vec3 c ){
+    vec3 rgb = clamp(abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),
+                             6.0)-3.0)-1.0,
+                     0.0,
+                     1.0 );
+    rgb = rgb*rgb*(3.0-2.0*rgb);
+    return c.z * mix( vec3(1.0), rgb, c.y);
+}
+
+// by Jeremy Rotsztain
+// st: canvas position
+// pos: rectangle position
+// size: rectangle width/height
+
+float drawRectangle(vec2 st, vec2 pos, vec2 size){
+    
+    float result = 1.0;
+    
+    vec2 border = (1.0-size)/2.;
+    
+    st = st - pos + vec2(0.5);
+    
+    result = smoothstep( 0.3,border.x, st.x);
+    result *= step( border.x, 1.0-st.x);
+    result *= step( border.y, st.y);
+    result *= step( border.y, 1.-st.y);
+    
+    return result;
+}
+
+// by Patricio Gonzalez-Vivo
+// from The Book of Shaders
+
+float random (vec2 st) {
+    return fract(sin(dot(st.xy,
+                         vec2(12.9898,78.233)))*
+        43758.5453123);
+}
+
+// by Jeremy Rotsztain
+// slightly more useful random
+// min: minimum value
+// max: maximum value
+
+float randomRange( vec2 st, float min, float max){
+    
+    float r = random( st);
+    float range = max-min;
+    return r * range + min;
+}
+
+void main() {
+     
+    vec2 st = gl_FragCoord.xy/u_resolution.xy;
+    st.x *= u_resolution.x/u_resolution.y;
+
+    vec3 color = vec3(0.);
+    
+	// draw 200 shapes/layers
+    
+    for( int i=0; i<200; i++){
+    
+		 // pick a random position
+         // use the for loop index to change the random seed
+         // use the same x value for each random 
+         // use a different y value for each time random is called in the loop
+         // so that the results are the same
+         
+         vec2 pos;
+         pos.x = random( vec2(i, 0));
+         pos.y = random( vec2(i, 10));
+        
+		 // calculate a rectangle 0.2 x 0.x
+         float shape = drawRectangle( st, pos, vec2(0.2,0.2));
+        
+		 // random hue, high saturation & random brightness
+         vec3 hsb;
+         hsb[0] = random( vec2(i, 20)); // hue
+         hsb[1] = 0.9; // saturation
+         hsb[2] = randomRange(vec2(i, 30), 0.45, 1.0); // brightness
+        
+		 // convert to rgb
+         vec3 shapeColor = hsb2rgb(hsb);
+        
+		 // mix color where shape == 1.0
+		 // otherwise keep previous color
+         color = mix( color, shapeColor, shape);
+    }
+
+    gl_FragColor = vec4(color,1.0);
+}
