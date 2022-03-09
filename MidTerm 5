@@ -6,9 +6,9 @@
 precision mediump float;
 #endif
 
-uniform vec2 uResolution;
-uniform vec2 uMouse;
-uniform float uTime;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform float u_time;
 
 float map(float value, float min1, float max1, float min2, float max2) {
   return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
@@ -125,7 +125,7 @@ vec3 hsb2rgb( in vec3 c )
 // based on time, fract to keep in [0,1] range
 // by Jeremy Rotsztain
 
-float hue = fract(uTime * 0.1);
+float hue = fract(u_time * 0.1);
 vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
 
 float snoise(vec2 v){
@@ -160,7 +160,7 @@ vec3 doAnimation0(){
 }
 
 void main(){
-    vec2 st = gl_FragCoord.xy/uResolution.xy;
+    vec2 st = gl_FragCoord.xy/u_resolution.xy;
     vec2 st0 = st;
     
     vec3 colors[14];
@@ -181,12 +181,12 @@ void main(){
     vec3 color = vec3(0.0);
 
     // bottom-left
-    vec2 bl = smoothstep(0.3,abs(sin(uTime)),st);
+    vec2 bl = smoothstep(0.3,abs(sin(u_time)),st);
     //vec2 bl = smoothstep(0.1,0.5,st);
     float pct = bl.x * bl.y;
 
     // top-right
-    vec2 tr = smoothstep(0.1,abs(sin(uTime)),1.0-st);
+    vec2 tr = smoothstep(0.1,abs(sin(u_time)),1.0-st);
     pct *= tr.x * tr.y;
 
     float row = 1.0 - st.y;
@@ -198,10 +198,10 @@ float corner = hue+0.83;
     vec3 purple = calculateHueLerp(colors, corner); 
     vec3 red = calculateHueLerp(colors, corner-0.819); 
     
-    float t1 = mod(uTime*0.5, 3.);
+    float t1 = mod(u_time*0.5, 3.);
     float t2 = floor(t1);
-    float t3 = mod(uTime, 20.);
-    float t4 = mod(uTime + 100., uTime + 200.);
+    float t3 = mod(u_time, 20.);
+    float t4 = mod(u_time + 100., u_time + 200.);
 	if (t1 == 0.){
         color = doAnimation0(); 
     } else if (t2 == 1.0) {
