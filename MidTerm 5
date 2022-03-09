@@ -192,13 +192,17 @@ void main(){
     float row = 1.0 - st.y;
     row = floor( row * 4.0);
     
-float corner = hue+0.83;
+	float corner = hue+0.83;
     color = calculateHueLerp(colors, corner);
+    float corner2 = hue+0.249;
+    color = calculateHueLerp(colors, corner2);
         
     vec3 purple = calculateHueLerp(colors, corner); 
     vec3 red = calculateHueLerp(colors, corner-0.819); 
+    vec3 yellow = calculateHueLerp(colors, corner2); 
+    vec3 green = calculateHueLerp(colors, corner2+0.3);
     
-    float t1 = mod(u_time*0.5, 3.);
+    float t1 = mod(u_time*0.05, 6.);
     float t2 = floor(t1);
     float t3 = mod(u_time, 20.);
     float t4 = mod(u_time + 100., u_time + 200.);
@@ -208,10 +212,24 @@ float corner = hue+0.83;
         vec2 noiseInput = vec2(st.x*t3, 2.);
     	float n = snoise( noiseInput )*0.5 + 0.5 ;
         color = mix( red , purple, step( pct, n)); 
-    } else {
+    } else if (t2 == 2.0){
         vec2 noiseInput = vec2(st.x*t4, 2.);
     	float n = snoise( noiseInput )*0.5 + 0.5 ;
         color = mix( red , purple, step( pct, n));
+    } else if (t2 == 3.0) {
+        vec2 noiseInput = vec2(st.x*t3, 2.);
+    	float n = snoise( noiseInput )*0.5 + 0.5 ;
+        pct = distance(st,step(vec2(0.5),st));
+        color = mix( red , purple, step( pct, n));
+    } else if (t2 == 4.0){
+        vec2 noiseInput = vec2(st.x*t4, 2.);
+    	float n = snoise( noiseInput )*0.5 + 0.5 ;
+        pct = distance(st,step(vec2(0.5),st));
+        color = mix( red , purple, step( pct, n));
+    } else {
+        st *= 3.0;
+        st = fract(st);
+        color = mix(yellow,green,vec3(st,1.));
     }
        
 
