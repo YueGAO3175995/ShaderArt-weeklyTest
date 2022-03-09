@@ -229,7 +229,7 @@ void main(){
     } else {
         st *= 3.0;
         st = fract(st);
-        color = mix(yellow,green,vec3(st,1.));
+        color = mix(yellow,green,vec3(st,t2));
     }
        
 
