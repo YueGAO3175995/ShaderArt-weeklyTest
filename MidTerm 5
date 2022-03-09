@@ -154,6 +154,7 @@ float snoise(vec2 v){
   g.yz = a0.yz * x12.xz + h.yz * x12.yw;
   return 130.0 * dot(m, g);
 }
+
 void main(){
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     vec2 st0 = st;
@@ -201,9 +202,3 @@ float corner = hue+0.83;
 }
 
 
-
-
-
-    gl_FragColor = vec4(color,1.0);
-}
-*/
